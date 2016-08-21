@@ -1,16 +1,32 @@
 var Vue = require('vue');
+var VueResource = require('vue-resource');
+var VueRouter = require('vue-router')
 
-import lv_header from './components/layouts/header.vue';
-import lv_sidebarmenu from './components/layouts/sidebarmenu.vue';
-import lv_content from './components/layouts/content.vue';
-import lv_footer from './components/layouts/footer.vue';
+Vue.use(VueRouter);
+Vue.use(VueResource);
 
-new Vue({
-    el: '#app',
-    components: {
-        lv_header,
-        lv_sidebarmenu,
-        lv_content,
-        lv_footer
+import MainLayout from './components/layouts/main_layout.vue';
+import Login from './components/login/login.vue';
+
+var App = Vue.extend({});
+var router = new VueRouter();
+
+Vue.http.headers.common['X-CSRF-TOKEN'] = document.querySelector('#token').getAttribute('value');
+
+router.map({
+    '/': {
+        component: function () {
+            router.go({ name: 'login' });
+        }
+    },
+    '/login': {
+        name: 'login',
+        component: Login
+    },
+    '/solucion': {
+        name: 'main',
+        component: MainLayout
     }
 });
+
+router.start(App, '#app');

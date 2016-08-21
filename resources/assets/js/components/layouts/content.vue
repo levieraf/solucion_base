@@ -4,13 +4,15 @@
 
 <template>
   <div class="body-content">
-    contenido
+    <div class="container">
+      contenido body
+    </div>
   </div>
 </template>
 
 <script>
   export default {
-    data: function () {
+    data(){
       return {}
     }
   };

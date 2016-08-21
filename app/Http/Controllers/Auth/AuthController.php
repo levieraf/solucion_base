@@ -1,12 +1,16 @@
 <?php
 
 namespace App\Http\Controllers\Auth;
-
+use Auth;
+use JWTAuth;
 use App\User;
 use Validator;
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\ThrottlesLogins;
 use Illuminate\Foundation\Auth\AuthenticatesAndRegistersUsers;
+
+use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 
 class AuthController extends Controller
 {
@@ -39,6 +43,36 @@ class AuthController extends Controller
     {
         $this->middleware($this->guestMiddleware(), ['except' => 'logout']);
     }
+
+    public function authenticate(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'email' => 'required',
+            'password' => 'required'
+        ]);
+
+        if ($validator->fails()) {
+            $messages = $validator->messages();
+            return response()->json(['error' => $messages], 400);
+        }
+
+        $email = $request->input('email');
+        $password = $request->input('password');
+        $activo = 1;
+
+        if (! $token = JWTAuth::attempt(['email' => $email, 'password' => $password, 'activo' => $activo])) {
+            return response()->json(['error' => trans('auth.failed')], 401);
+        }
+
+        $usuario = JWTAuth::toUser($token);
+        Auth::login($usuario);
+
+        return response()
+            ->json(compact('token'))
+            ->withCookie('Authorization', 'Bearer ' . $token);
+    }
+
+
 
     /**
      * Get a validator for an incoming registration request.

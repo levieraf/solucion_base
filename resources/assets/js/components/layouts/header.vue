@@ -1,5 +1,9 @@
 <style lang="sass">
-
+  .header-menu{
+    border: 1px solid black;
+    height:60px;
+    width: 100px;
+  }
 </style>
 
 <template>
@@ -10,7 +14,7 @@
 
 <script>
   export default {
-    data: function () {
+    data(){
       return {}
     }
   };

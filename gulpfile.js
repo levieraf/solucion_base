@@ -1,5 +1,4 @@
 var elixir = require('laravel-elixir');
-
 /*
  |--------------------------------------------------------------------------
  | Elixir Asset Management
@@ -18,9 +17,16 @@ elixir.config.js.browserify.transformers.push({
 
 elixir(function(mix) {
     // mix.sass('app.scss')
-    // mix.scripts([
-    //     'libs/vue.js',
-    //     'libs/vue-router.js'
-    // ], './public/js/vendor.js');
+
+    mix.styles([
+        'bootstrap.min.css',
+        'bootstrap-theme.min.css'
+    ]);
+
+    mix.scripts([
+        'libs/jquery-3.1.0.min.js',
+        'libs/bootstrap.min.js'
+    ], './public/js/vendor.js');
+
     mix.browserify('main.js');
 });
